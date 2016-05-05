@@ -46,7 +46,7 @@ public class ExecuteReport {
 
 		// Open the report design
 		IReportRunnable design = engine.openReportDesign(
-				"W:/ISO/ISO Documentation/Application Development/AiM/BIRT/KSU in Production/KSU089 Building Inventory by Organization 20151211 0825 .rptdesign");
+				"W:/ISO/ISO Documentation/Application Development/AiM/BIRT/KSU in Production/KSU073 Property by Org 20151103 1559.rptdesign");
 
 		// Create task to run and render the report,
 		IRunAndRenderTask task = engine.createRunAndRenderTask(design);
@@ -76,27 +76,31 @@ public class ExecuteReport {
 			} else {
 				// Parameters are not in a group
 				IScalarParameterDefn scalar = (IScalarParameterDefn) param;
-				// System.out.println(param.getName());
-				// Parameter is a List Box
-				if (scalar.getControlType() == IScalarParameterDefn.LIST_BOX) {
-					Collection selectionList = paramDefnTask.getSelectionList(param.getName());
-					// Selection contains data
-					if (selectionList != null) {
-						for (Iterator sliter = selectionList.iterator(); sliter.hasNext();) {
-							// Print out the selection choices
-							IParameterSelectionChoice selectionItem = (IParameterSelectionChoice) sliter.next();
-							String value = (String) selectionItem.getValue();
-							// String label = selectionItem.getLabel();
-							// System.out.println(label + "--" + value);
-							// Set parameter values and validate
-							task.setParameterValue("Organization", value);
-							task.validateParameters();
-							PDFRenderOption options = new PDFRenderOption();
-							options.setOutputFileName("C:/Users/randallbooth/Desktop/ksu89-" + value + ".pdf");
-							options.setOutputFormat("pdf");
-							task.setRenderOption(options);
-							// run and render report
-							task.run();
+				if (param.getName().equalsIgnoreCase("Organization")) {
+					// System.out.println(param.getName());
+					// Parameter is a List Box
+					if (scalar.getControlType() == IScalarParameterDefn.LIST_BOX) {
+						Collection selectionList = paramDefnTask.getSelectionList(param.getName());
+						// Selection contains data
+						if (selectionList != null) {
+							for (Iterator sliter = selectionList.iterator(); sliter.hasNext();) {
+								// Print out the selection choices
+								IParameterSelectionChoice selectionItem = (IParameterSelectionChoice) sliter.next();
+								String value = (String) selectionItem.getValue();
+								// String label = selectionItem.getLabel();
+								// System.out.println(label + "--" + value);
+								// Set parameter values and validate
+								task.setParameterValue("Location Status", "OPEN");
+								task.setParameterValue("Organization", value);
+								task.validateParameters();
+								PDFRenderOption options = new PDFRenderOption();
+								options.setOutputFileName(
+										"C:/Users/randallbooth/Desktop/ksu073/ksu073-" + value + ".pdf");
+								options.setOutputFormat("pdf");
+								task.setRenderOption(options);
+								// run and render report
+								task.run();
+							}
 						}
 					}
 				}
