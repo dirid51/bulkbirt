@@ -100,6 +100,6 @@
 	<classpathentry kind="lib" path="C:/birt-runtime-4_5_0/ReportEngine/lib/org.w3c.dom.events_3.0.0.draft20060413_v201105210656.jar"/>
 	<classpathentry kind="lib" path="C:/birt-runtime-4_5_0/ReportEngine/lib/org.w3c.dom.smil_1.0.1.v200903091627.jar"/>
 	<classpathentry kind="lib" path="C:/birt-runtime-4_5_0/ReportEngine/lib/org.w3c.dom.svg_1.1.0.v201011041433.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/MySQL/MySQL Connector J/mysql-connector-java-5.1.35-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/MySQL/Connector.J 5.1/mysql-connector-java-5.1.38-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -21,6 +21,17 @@ import org.eclipse.birt.report.engine.api.PDFRenderOption;
 import org.eclipse.birt.report.engine.api.impl.RunAndRenderTask;
 
 public class ExecuteReport {
+	private static String ENGINE_HOME = null;
+	private static String REPORT_PATH = null;
+	private static String REPORT_PARAMETER_1 = null;
+	private static String REPORT_PARAMETER_1_VALUE = null;
+	private static String REPORT_PARAMETER_2 = null;
+	private static String REPORT_PARAMETER_2_VALUE = null;
+	private static String OUTPUT_DIR_PATH = null;
+	private static String OUTPUT_FILE_PREFIX = null;
+	private static String OUTPUT_FILE_EXTENSION = null;
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	static void executeReport() throws EngineException {
 
 		IReportEngine engine = null;
@@ -30,7 +41,7 @@ public class ExecuteReport {
 
 			// Configure the Engine and start the Platform
 			config = new EngineConfig();
-			config.setEngineHome("C:/birtruntime/birt-runtime-version/ReportEngine");
+			config.setEngineHome(ENGINE_HOME);
 			// set log config using (null, Level) if you do not want a log file
 			config.setLogConfig(null, Level.OFF);
 
@@ -45,8 +56,7 @@ public class ExecuteReport {
 		}
 
 		// Open the report design
-		IReportRunnable design = engine.openReportDesign(
-				"W:/ISO/ISO Documentation/Application Development/AiM/BIRT/KSU in Production/KSU073 Property by Org 20151103 1559.rptdesign");
+		IReportRunnable design = engine.openReportDesign(REPORT_PATH);
 
 		// Create task to run and render the report,
 		IRunAndRenderTask task = engine.createRunAndRenderTask(design);
@@ -55,7 +65,7 @@ public class ExecuteReport {
 
 		IGetParameterDefinitionTask paramDefnTask = engine.createGetParameterDefinitionTask(design);
 
-		Collection params = paramDefnTask.getParameterDefns(true);
+		Collection<IParameterDefnBase> params = paramDefnTask.getParameterDefns(true);
 
 		Iterator iter = params.iterator();
 		// Iterate over all parameters
@@ -76,7 +86,7 @@ public class ExecuteReport {
 			} else {
 				// Parameters are not in a group
 				IScalarParameterDefn scalar = (IScalarParameterDefn) param;
-				if (param.getName().equalsIgnoreCase("Organization")) {
+				if (param.getName().equalsIgnoreCase(REPORT_PARAMETER_1)) {
 					// System.out.println(param.getName());
 					// Parameter is a List Box
 					if (scalar.getControlType() == IScalarParameterDefn.LIST_BOX) {
@@ -90,13 +100,16 @@ public class ExecuteReport {
 								// String label = selectionItem.getLabel();
 								// System.out.println(label + "--" + value);
 								// Set parameter values and validate
-								task.setParameterValue("Location Status", "OPEN");
-								task.setParameterValue("Organization", value);
+								task.setParameterValue(REPORT_PARAMETER_2, REPORT_PARAMETER_2_VALUE);
+								task.setParameterValue(REPORT_PARAMETER_1,
+										REPORT_PARAMETER_1_VALUE.equalsIgnoreCase("[value]") ? value
+												: REPORT_PARAMETER_1_VALUE);
 								task.validateParameters();
 								PDFRenderOption options = new PDFRenderOption();
-								options.setOutputFileName(
-										"C:/Users/randallbooth/Desktop/ksu073/ksu073-" + value + ".pdf");
-								options.setOutputFormat("pdf");
+								options.setOutputFileName(OUTPUT_DIR_PATH + OUTPUT_FILE_PREFIX + "-"
+										+ cleanStringForFilename(selectionItem.getLabel()) + "."
+										+ OUTPUT_FILE_EXTENSION);
+								options.setOutputFormat(OUTPUT_FILE_EXTENSION);
 								task.setRenderOption(options);
 								// run and render report
 								task.run();
@@ -109,9 +122,13 @@ public class ExecuteReport {
 
 		task.close();
 
-		engine.shutdown();
+		engine.destroy();
 		Platform.shutdown();
 		System.out.println("Finished");
+	}
+
+	private static String cleanStringForFilename(String s) {
+		return s.replaceAll("[^a-zA-Z0-9.-]", "_").replaceAll("[_]+", "_");
 	}
 
 	/**
@@ -119,6 +136,17 @@ public class ExecuteReport {
 	 */
 	public static void main(String[] args) {
 		try {
+
+			ENGINE_HOME = System.getProperty("engine_home");
+			REPORT_PATH = System.getProperty("report_path");
+			REPORT_PARAMETER_1 = System.getProperty("report_parameter_1");
+			REPORT_PARAMETER_1_VALUE = System.getProperty("report_parameter_1_value");
+			REPORT_PARAMETER_2 = System.getProperty("report_parameter_2");
+			REPORT_PARAMETER_2_VALUE = System.getProperty("report_parameter_2_value");
+			OUTPUT_DIR_PATH = System.getProperty("output_dir_path");
+			OUTPUT_FILE_PREFIX = System.getProperty("output_file_prefix");
+			OUTPUT_FILE_EXTENSION = System.getProperty("output_file_extension");
+
 			executeReport();
 		} catch (Exception e) {
 			e.printStackTrace();
