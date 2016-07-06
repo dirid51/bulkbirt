@@ -138,14 +138,41 @@ public class ExecuteReport {
 		try {
 
 			ENGINE_HOME = System.getProperty("engine_home");
+			if (ENGINE_HOME == null) {
+				throw new Exception("Null value for property: engine_home");
+			}
 			REPORT_PATH = System.getProperty("report_path");
+			if (REPORT_PATH == null) {
+				throw new Exception("Null value for property: report_path");
+			}
 			REPORT_PARAMETER_1 = System.getProperty("report_parameter_1");
+			if (REPORT_PARAMETER_1 == null) {
+				throw new Exception("Null value for property: report_parameter_1");
+			}
 			REPORT_PARAMETER_1_VALUE = System.getProperty("report_parameter_1_value");
+			if (REPORT_PARAMETER_1_VALUE == null) {
+				throw new Exception("Null value for property: report_parameter_1_value");
+			}
 			REPORT_PARAMETER_2 = System.getProperty("report_parameter_2");
+			if (REPORT_PARAMETER_2 == null) {
+				throw new Exception("Null value for property: report_parameter_2");
+			}
 			REPORT_PARAMETER_2_VALUE = System.getProperty("report_parameter_2_value");
+			if (REPORT_PARAMETER_2_VALUE == null) {
+				throw new Exception("Null value for property: report_parameter_2_value");
+			}
 			OUTPUT_DIR_PATH = System.getProperty("output_dir_path");
+			if (OUTPUT_DIR_PATH == null) {
+				throw new Exception("Null value for property: output_dir_path");
+			}
 			OUTPUT_FILE_PREFIX = System.getProperty("output_file_prefix");
+			if (OUTPUT_FILE_PREFIX == null) {
+				throw new Exception("Null value for property: output_file_prefix");
+			}
 			OUTPUT_FILE_EXTENSION = System.getProperty("output_file_extension");
+			if (OUTPUT_FILE_EXTENSION == null) {
+				throw new Exception("Null value for property: output_file_extension");
+			}
 
 			executeReport();
 		} catch (Exception e) {
