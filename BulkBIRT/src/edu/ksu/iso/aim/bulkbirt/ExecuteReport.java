@@ -67,10 +67,10 @@ public class ExecuteReport {
 
 		Collection<IParameterDefnBase> params = paramDefnTask.getParameterDefns(true);
 
-		Iterator iter = params.iterator();
+		Iterator<IParameterDefnBase> iter = params.iterator();
 		// Iterate over all parameters
 		while (iter.hasNext()) {
-			IParameterDefnBase param = (IParameterDefnBase) iter.next();
+			IParameterDefnBase param = iter.next();
 			// Group section found
 			if (param instanceof IParameterGroupDefn) {
 				// // Get Group Name
@@ -97,6 +97,8 @@ public class ExecuteReport {
 								// Print out the selection choices
 								IParameterSelectionChoice selectionItem = (IParameterSelectionChoice) sliter.next();
 								String value = (String) selectionItem.getValue();
+								String label = (selectionItem == null || selectionItem.getLabel() == null) ? value
+										: selectionItem.getLabel();
 								// String label = selectionItem.getLabel();
 								// System.out.println(label + "--" + value);
 								// Set parameter values and validate
@@ -107,8 +109,7 @@ public class ExecuteReport {
 								task.validateParameters();
 								PDFRenderOption options = new PDFRenderOption();
 								options.setOutputFileName(OUTPUT_DIR_PATH + OUTPUT_FILE_PREFIX + "-"
-										+ cleanStringForFilename(selectionItem.getLabel()) + "."
-										+ OUTPUT_FILE_EXTENSION);
+										+ cleanStringForFilename(label) + "." + OUTPUT_FILE_EXTENSION);
 								options.setOutputFormat(OUTPUT_FILE_EXTENSION);
 								task.setRenderOption(options);
 								// run and render report
@@ -124,7 +125,6 @@ public class ExecuteReport {
 
 		engine.destroy();
 		Platform.shutdown();
-		System.out.println("Finished");
 	}
 
 	private static String cleanStringForFilename(String s) {
