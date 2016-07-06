@@ -128,7 +128,7 @@ public class ExecuteReport {
 	}
 
 	private static String cleanStringForFilename(String s) {
-		return s.replaceAll("[^a-zA-Z0-9.-]", "_").replaceAll("[_]+", "_");
+		return s.replaceAll("[^a-zA-Z0-9-]", "_").replaceAll("[_]+", "_").replaceAll("[_]?-[_]?", "-").replaceAll("_$", "");
 	}
 
 	/**
